@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pronote - Connexion</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        :root {
+            --theme-foncee: #21874a;
+            --theme-claire: #55C381;
+            --theme-moyen1: #2C6543;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, var(--theme-moyen1), var(--theme-foncee));
+            color: white;
+            padding: 16px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+        
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .account-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .account-item {
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .account-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .account-item:last-child {
+            border-bottom: none;
+        }
+        
+        .avatar {
+            width: 48px;
+            height: 48px;
+            background: #e8f5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 24px;
+        }
+        
+        .account-info h3 {
+            font-size: 1.05rem;
+            margin-bottom: 4px;
+        }
+        
+        .account-info p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+        
+        .add-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--theme-foncee);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 4px 12px rgba(33,135,74,0.4);
+            z-index: 100;
+        }
+        
+        /* Popup */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+        
+        .popup-content {
+            background: white;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            border-radius: 16px 16px 0 0;
+            padding: 20px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        .popup-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .popup-header h2 {
+            color: var(--theme-foncee);
+            font-size: 1.3rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            margin: 12px 0;
+        }
+        
+        input:focus {
+            border-color: var(--theme-foncee);
+            outline: none;
+        }
+        
+        .error-msg {
+            color: #d32f2f;
+            font-size: 0.95rem;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: var(--theme-foncee);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-top: 16px;
+            cursor: pointer;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 2000;
+            max-width: 320px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pronote</h1>
+    </div>
+    
+    <div class="content">
+        <div class="account-list">
+            <div class="account-item" onclick="selectAccount()">
+                <div class="avatar">👨‍🎓</div>
+                <div class="account-info">
+                    <h3>COLLEGE AUSONE BAZAS</h3>
+                    <p>Espace Élèves - DAILHAU Mathis</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="add-btn" onclick="addAccount()">+</div>
+    
+    <!-- Phone Number Popup -->
+    <div id="phonePopup" class="popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>Sécurisation du compte</h2>
+                <p>Pour accéder à votre compte, veuillez ajouter un numéro de téléphone.</p>
+            </div>
+            
+            <input type="tel" id="phoneInput" placeholder="06 XX XX XX XX" maxlength="10">
+            <div id="phoneError" class="error-msg"></div>
+            
+            <button onclick="validatePhone()">Valider</button>
+            <button onclick="closePopup()" style="background:#666; margin-top:8px;">Annuler</button>
+        </div>
+    </div>
+    
+    <!-- Code Popup -->
+    <div id="codePopup" class="popup">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h2>Code de sécurité</h2>
+                <p id="smsInfo">Un SMS a été envoyé au 0XX******XX</p>
+            </div>
+            
+            <input type="text" id="codeInput" placeholder="Code à 6 chiffres" maxlength="6">
+            <div id="codeError" class="error-msg"></div>
+            
+            <button onclick="validateCode()">Valider le code</button>
+            <button onclick="closeCodePopup()" style="background:#666; margin-top:8px;">Annuler</button>
+        </div>
+    </div>
+    
+    <!-- Fake Notification -->
+    <div id="fakeNotif" class="notification">
+        <strong>Code de sécurité</strong><br>
+        Votre code de sécurité est <span id="randomCode">123456</span>
+    </div>
+    
+    <script>
+        let currentCode = "";
+        
+        function selectAccount() {
+            document.getElementById('phonePopup').style.display = 'flex';
+            document.getElementById('phoneInput').focus();
+        }
+        
+        function closePopup() {
+            document.getElementById('phonePopup').style.display = 'none';
+            document.getElementById('phoneError').style.display = 'none';
+        }
+        
+        function addAccount() {
+            alert("Impossible d'ajouter un compte pour le moment.");
+        }
+        
+        function validatePhone() {
+            const phone = document.getElementById('phoneInput').value.trim();
+            const errorDiv = document.getElementById('phoneError');
+            
+            if (phone === "0670654093") {
+                errorDiv.textContent = "Ce numéro est déjà utilisé par un autre compte.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (phone === "0556252554") {
+                errorDiv.textContent = "Les numéros de téléphone fixe ne sont pas pris en charge.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            if (phone.length < 10 || !phone.startsWith("0")) {
+                errorDiv.textContent = "Numéro invalide.";
+                errorDiv.style.display = 'block';
+                return;
+            }
+            
+            // Success - fake SMS
+            errorDiv.style.display = 'none';
+            closePopup();
+            
+            // Generate random 6 digit code
+            currentCode = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            // Show fake notification
+            document.getElementById('randomCode').textContent = currentCode;
+            const notif = document.getElementById('fakeNotif');
+            notif.style.display = 'block';
+            
+            setTimeout(() => {
+                notif.style.display = 'none';
+                document.getElementById('codePopup').style.display = 'flex';
+                document.getElementById('codeInput').focus();
+            }, 2800);
+        }
+        
+        function closeCodePopup() {
+            document.getElementById('codePopup').style.display = 'none';
+        }
+        
+        function validateCode() {
+            const entered = document.getElementById('codeInput').value.trim();
+            const errorDiv = document.getElementById('codeError');
+            
+            if (entered === currentCode) {
+                alert("✅ Connexion réussie !\n\n(Blague activée - Pronote ne marche pas aujourd'hui 😄)");
+                closeCodePopup();
+            } else {
+                errorDiv.textContent = "Code incorrect. Veuillez réessayer.";
+                errorDiv.style.display = 'block';
+            }
+        }
+        
+        // Close popups on escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "Escape") {
+                const popups = document.querySelectorAll('.popup');
+                popups.forEach(p => p.style.display = 'none');
+            }
+        });
+        
+        // Make it feel more real
+        console.log("%cPronote - Version de démonstration pour blague", "color: #21874a; font-size: 14px;");
+    </script>
+</body>
+</html>
